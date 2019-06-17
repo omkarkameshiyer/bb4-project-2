@@ -20,9 +20,9 @@ def index():
 
 @app.route('/getcsvdatafile')
 def getCsv():
-    with open('schoolShootingData_withGeoCoordinates.csv', 'r') as file:
+    with open('./db/schoolShootingData_withGeoCoordinates.csv', 'r', encoding="utf8") as file:
     	data = file.read() + '\n'
     return (repr(data))	
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
