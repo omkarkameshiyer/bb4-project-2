@@ -3,6 +3,8 @@ import os
 import pandas as pd
 import numpy as np
 
+import csv
+
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
@@ -18,11 +20,14 @@ def index():
     """Return the homepage."""
     return render_template("index.html")
 
-@app.route('/getcsvdatafile')
-def getCsv():
-    with open('./db/schoolShootingData_withGeoCoordinates.csv', 'r', encoding="utf8") as file:
-    	data = file.read() + '\n'
-    return (repr(data))	
+@app.route('/jsonShootingData')
+def getShooting():
+    data_file = './db/schoolShootingData_withGeoCoordinates.csv'
+    data_file_pd = pd.read_csv(data_file, encoding='utf8')
+    df = pd.DataFrame(data_file_pd)
+
+    return jsonify(df.to_dict(orient="records"))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
