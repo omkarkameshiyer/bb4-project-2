@@ -17,13 +17,12 @@ import csv
 import json  
 
 app = Flask(__name__, static_url_path='/static')
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://bbbaxhpiaojdbv:07b607300e23255417213ff951bedd111995a6c10e4bcceea0ae07a6499e2afc@ec2-50-19-254-63.compute-1.amazonaws.com:5432/dfv685d0cppek8"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/db.sqlite"
 db = SQLAlchemy(app)
 Base = declarative_base()
 
 class Survey(db.Model):
     __tablename__ = 'survey'
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     age = db.Column(db.Integer)
@@ -45,7 +44,7 @@ class Survey(db.Model):
 ##################################################
 ## Database Setup
 ##################################################
-engine = create_engine("postgres://bbbaxhpiaojdbv:07b607300e23255417213ff951bedd111995a6c10e4bcceea0ae07a6499e2afc@ec2-50-19-254-63.compute-1.amazonaws.com:5432/dfv685d0cppek8",pool_recycle=1)
+engine = create_engine("sqlite:///db/db.sqlite",pool_recycle=1,connect_args={'check_same_thread': False})
 #
 # reflect an existing database into a new model
 Base = automap_base()

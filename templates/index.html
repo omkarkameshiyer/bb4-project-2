@@ -28,11 +28,27 @@
   <!-- The div that holds Soyoung's map -->
   <div id="map-soyoung"></div>
     <!-- The div that holds Huy's analysis -->
-  <div id="huy"></div>
-  <div id="huy" class="form"></div>
+  <div id="huy">
+    
+    <div class="container">
+    
+    <div class="row">
+        <div class="col-sm-4">
+       <div class="jumbotron" style="text-align: center">
+      <h1>Take the survey!</h1>
+      <a href="/send" class="btn btn-primary" role="button">Add Vote</a>
+    </div>
+    </div>
+      <div class="col-md-8">
+        <h2>Today's Poll: Gun Laws</h2>
+        <div id="huyplot"></div>
+      </div>
+    </div>
+    </div>
+</div>
 
   <!-- D3 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.2/d3.min.js"></script>
 
   <!-- amCharts Resources -->
   <script src="https://www.amcharts.com/lib/4/core.js"></script>
@@ -62,6 +78,10 @@
 
   <!-- Our JavaScript -->
   <script type="text/javascript" src="static/js/logic.js"></script>
+  
+  
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+   <script src="{{ url_for('static', filename='js/huy.js') }}"></script>
 
 </body>
 

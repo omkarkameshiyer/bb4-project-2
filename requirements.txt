@@ -14,3 +14,7 @@ SQLAlchemy==1.2.10
 Werkzeug==0.14.1
 gunicorn ==19.6.0
 tablib==0.12.1
+geocoder==1.38.1
+geojson==2.4.1
+gunicorn==19.9.0
+psycopg2==2.8.3
