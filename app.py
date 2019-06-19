@@ -26,6 +26,8 @@ def getShooting():
     data_file_pd = pd.read_csv(data_file, encoding='utf8')
     df = pd.DataFrame(data_file_pd)
 
+    # fill empty values(NaN) to prevent SyntaxError in browser
+    df.fillna('NaN',inplace=True)
     return jsonify(df.to_dict(orient="records"))
 
 
