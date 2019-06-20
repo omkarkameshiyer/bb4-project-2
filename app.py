@@ -27,7 +27,7 @@ Base = declarative_base()
 class Survey(db.Model):
     __tablename__ = 'survey'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(64))
     age = db.Column(db.Integer)
     question1 = db.Column(db.String(64))
@@ -50,16 +50,19 @@ class Survey(db.Model):
 ##################################################
 engine = create_engine("postgres://bbbaxhpiaojdbv:07b607300e23255417213ff951bedd111995a6c10e4bcceea0ae07a6499e2afc@ec2-50-19-254-63.compute-1.amazonaws.com:5432/dfv685d0cppek8",pool_recycle=1)
 #
+
+# Create our session (link) from Python to the DB
+session = Session(engine)
+
+
 # reflect an existing database into a new model
 Base = automap_base()
 # reflect the tables
 Base.prepare(engine, reflect=True)
 
-# Save reference to the table
-Voters = Base.classes.survey
 
-# Create our session (link) from Python to the DB
-session = Session(engine)
+
+# Save reference to the table
 
 
 
@@ -70,8 +73,8 @@ def setup():
     # Recreate database each time for demo
     #db.drop_all()
     db.create_all()
-    db.session.add(Survey("HuyTest",38,"Yes","Yes"))
-    db.session.commit()
+    #db.session.add(Survey("HuyTest",38,"Yes","Yes"))
+   # db.session.commit()
 
 
 @app.route("/")
@@ -134,6 +137,7 @@ def send():
 def list_voter():
     """Return a list of voting data including the name, age, response of each vote"""
     # Query all passengers
+    Voters = Base.classes.survey
     results = session.query(Voters.name, Voters.age, Voters.question1, Voters.question2).all()
 
     # Create a dictionary from the row data and append to a list of all_passengers
@@ -163,6 +167,8 @@ def bar():
     }
 
     return jsonify(trace)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
