@@ -28,7 +28,7 @@ def to_json(row):
 
 
 app = Flask(__name__, static_url_path='/static')
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/db.sqllite"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/db.sqlite"
 db = SQLAlchemy(app)
 Base = declarative_base()
 
@@ -56,7 +56,7 @@ class Survey(db.Model):
 ##################################################
 ## Database Setup
 ##################################################
-engine = create_engine("sqlite:///db/db.sqllite", pool_recycle=1)
+engine = create_engine("sqlite:///db/db.sqlite", pool_recycle=1)
 #
 
 # Create our session (link) from Python to the DB
@@ -112,15 +112,6 @@ def getCsv():
 
 
 
-@app.route('/jsonShootingData')
-def getShooting():
-    data_file = './db/schoolShootingData_withGeoCoordinates.csv'
-    data_file_pd = pd.read_csv(data_file, encoding='utf8')
-    df = pd.DataFrame(data_file_pd)
-
-    # fill empty values(NaN) to prevent SyntaxError in browser
-    df.fillna('NaN',inplace=True)
-    return jsonify(df.to_dict(orient="records"))
 
 
 
@@ -165,6 +156,9 @@ def list_voter():
 
     return jsonify(all_voters)
 
+
+
+
 # create route that returns data for plotting
 @app.route("/plotdata")
 def bar():
@@ -181,13 +175,19 @@ def bar():
 
     return jsonify(trace)
 
-   data_file = './db/schoolShootingData_withGeoCoordinates.csv'
-   data_file_pd = pd.read_csv(data_file, encoding='utf8')
-   df = pd.DataFrame(data_file_pd)
-   df["location"] = df["location"].map(lambda l: to_json(l.replace("'", '"')))
-   df.fillna('NaN',inplace=True)
 
-   return jsonify(df.to_dict(orient="records"))
+
+@app.route('/jsonShootingData')
+def getShooting():
+    data_file = './db/schoolShootingData_withGeoCoordinates.csv'
+    data_file_pd = pd.read_csv(data_file, encoding='utf8')
+    df = pd.DataFrame(data_file_pd)
+
+    # fill empty values(NaN) to prevent SyntaxError in browser
+    df.fillna('NaN',inplace=True)
+    df["location"] = df["location"].map(lambda l: to_json(l.replace("'", '"')))
+   
+    return jsonify(df.to_dict(orient="records"))
 
 if __name__ == "__main__":
     app.run(debug=True)
