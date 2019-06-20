@@ -91,15 +91,9 @@ def index():
     return app.send_static_file('index.html')
 
 @app.route("/MarkerClusters")
-def MakerClusters():
+def MarkerClusters():
    """Marker Clusters"""
    return render_template("MarkerClusters.html")
-
-
-@app.route("/MarkerClusters")
-def MakerClusters():
-    """Marker Clusters"""
-    return render_template("MarkerClusters.html")
 
 @app.route('/csvtable')
 def getCsvAsATable():
