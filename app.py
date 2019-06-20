@@ -28,7 +28,7 @@ def to_json(row):
 
 
 app = Flask(__name__, static_url_path='/static')
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://bbbaxhpiaojdbv:07b607300e23255417213ff951bedd111995a6c10e4bcceea0ae07a6499e2afc@ec2-50-19-254-63.compute-1.amazonaws.com:5432/dfv685d0cppek8"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/db.sqllite"
 db = SQLAlchemy(app)
 Base = declarative_base()
 
@@ -56,7 +56,7 @@ class Survey(db.Model):
 ##################################################
 ## Database Setup
 ##################################################
-engine = create_engine("postgres://bbbaxhpiaojdbv:07b607300e23255417213ff951bedd111995a6c10e4bcceea0ae07a6499e2afc@ec2-50-19-254-63.compute-1.amazonaws.com:5432/dfv685d0cppek8",pool_recycle=1)
+engine = create_engine("sqlite:///db/db.sqllite", pool_recycle=1)
 #
 
 # Create our session (link) from Python to the DB
