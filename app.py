@@ -104,21 +104,6 @@ def getCsv():
     return (repr(data))  
 
 
-@app.route('/csvtable')
-def getCsvAsATable():
-    dataset = tablib.Dataset()
-    with open('./db/schoolShootingData_withGeoCoordinates.csv', 'r', encoding="utf8") as file:
-        data = file.read()
-    dataset.csv =data
-    return dataset.html
-
-
-@app.route('/csvshootingdata')
-def getCsv():
-    with open('./db/schoolShootingData_withGeoCoordinates.csv', 'r', encoding="utf8") as file:
-        data = file.read() + '\n'
-    return (repr(data))  
-
 
 @app.route('/jsonShootingData')
 def getShooting():
