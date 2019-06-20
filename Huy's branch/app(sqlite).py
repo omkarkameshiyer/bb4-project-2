@@ -2,10 +2,7 @@ import os
 import datetime
 import pandas as pd
 import numpy as np
-
-import csv
 import tablib
-
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
@@ -19,23 +16,14 @@ from flask_sqlalchemy import SQLAlchemy
 import csv  
 import json  
 
-
-def to_json(row):
-    try:
-        return json.loads(row)
-    except:
-        return {}
-
-
 app = Flask(__name__, static_url_path='/static')
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://bbbaxhpiaojdbv:07b607300e23255417213ff951bedd111995a6c10e4bcceea0ae07a6499e2afc@ec2-50-19-254-63.compute-1.amazonaws.com:5432/dfv685d0cppek8"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/db.sqlite"
 db = SQLAlchemy(app)
 Base = declarative_base()
 
 class Survey(db.Model):
     __tablename__ = 'survey'
-
-    id = db.Column(db.BigInteger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     age = db.Column(db.Integer)
     question1 = db.Column(db.String(64))
@@ -56,21 +44,18 @@ class Survey(db.Model):
 ##################################################
 ## Database Setup
 ##################################################
-engine = create_engine("postgres://bbbaxhpiaojdbv:07b607300e23255417213ff951bedd111995a6c10e4bcceea0ae07a6499e2afc@ec2-50-19-254-63.compute-1.amazonaws.com:5432/dfv685d0cppek8",pool_recycle=1)
+engine = create_engine("sqlite:///db/db.sqlite",pool_recycle=1,connect_args={'check_same_thread': False})
 #
-
-# Create our session (link) from Python to the DB
-session = Session(engine)
-
-
 # reflect an existing database into a new model
 Base = automap_base()
 # reflect the tables
 Base.prepare(engine, reflect=True)
 
-
-
 # Save reference to the table
+Voters = Base.classes.survey
+
+# Create our session (link) from Python to the DB
+session = Session(engine)
 
 
 
@@ -81,52 +66,91 @@ def setup():
     # Recreate database each time for demo
     #db.drop_all()
     db.create_all()
-    #db.session.add(Survey("HuyTest",38,"Yes","Yes"))
-   # db.session.commit()
-
+    db.session.add(Survey("HuyTest",38,"Yes","Yes"))
+    db.session.commit()
 
 @app.route("/")
 def index():
     """Return the homepage."""
-    return app.send_static_file('index.html')
-
-@app.route("/MarkerClusters")
-def MakerClusters():
-   """Marker Clusters"""
-   return render_template("MarkerClusters.html")
-
-
-@app.route("/MarkerClusters")
-def MakerClusters():
-    """Marker Clusters"""
-    return render_template("MarkerClusters.html")
+    return render_template("index.html")
 
 @app.route('/csvtable')
 def getCsvAsATable():
     dataset = tablib.Dataset()
     with open('./db/schoolShootingData_withGeoCoordinates.csv', 'r', encoding="utf8") as file:
-        data = file.read()
+    	data = file.read()
     dataset.csv =data
     return dataset.html
-
 
 @app.route('/csvshootingdata')
 def getCsv():
     with open('./db/schoolShootingData_withGeoCoordinates.csv', 'r', encoding="utf8") as file:
-        data = file.read() + '\n'
-    return (repr(data))  
-
-
+    	data = file.read() + '\n'
+    return (repr(data))	
 
 @app.route('/jsonShootingData')
 def getShooting():
    data_file = './db/schoolShootingData_withGeoCoordinates.csv'
    data_file_pd = pd.read_csv(data_file, encoding='utf8')
    df = pd.DataFrame(data_file_pd)
-   df["location"] = df["location"].map(lambda l: to_json(l.replace("'", '"')))
-   df.fillna('NaN',inplace=True)
-
    return jsonify(df.to_dict(orient="records"))
+
+
+
+@app.route("/send", methods=["GET", "POST"])
+def send():
+
+    if request.method == "POST":
+        name = request.form["name"]
+        age = request.form["age"]
+        question1 = request.form["question1"]
+        question2 = request.form["question2"]
+        
+        
+
+        voter = Survey(name=name, age=int(age), question1=question1,question2=question2)
+        db.session.add(voter)
+        db.session.commit()
+
+        return redirect("/", code=302)
+
+    return render_template("survey.html")
+
+
+
+@app.route("/votedata")
+def list_voter():
+    """Return a list of voting data including the name, age, response of each vote"""
+    # Query all passengers
+    results = session.query(Voters.name, Voters.age, Voters.question1, Voters.question2).all()
+
+    # Create a dictionary from the row data and append to a list of all_passengers
+    all_voters = []
+    for name, age, question1,question2 in results:
+        voters_dict = {}
+        voters_dict["name"] = name
+        voters_dict["age"] = age
+        voters_dict["question1"] = question1
+        voters_dict["question2"] = question1
+        all_voters.append(voters_dict)
+
+    return jsonify(all_voters)
+
+# create route that returns data for plotting
+@app.route("/plotdata")
+def bar():
+    results = db.session.query(Survey.question1, func.count(Survey.question1)).group_by(Survey.question1).all()
+
+    result_1 = [result[0] for result in results]
+    count_1 = [result[1] for result in results]
+
+    trace = {
+        "x": result_1,
+        "y": count_1,
+        "type": "bar"
+    }
+
+    return jsonify(trace)
 
 if __name__ == "__main__":
     app.run(debug=True)
