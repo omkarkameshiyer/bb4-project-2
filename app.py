@@ -20,6 +20,12 @@ def index():
     """Return the homepage."""
     return render_template("index.html")
 
+@app.route("/MarkerClusters")
+def MakerClusters():
+    """Marker Clusters"""
+    return render_template("MarkerClusters.html")
+
+
 @app.route('/jsonShootingData')
 def getShooting():
     data_file = './db/schoolShootingData_withGeoCoordinates.csv'
