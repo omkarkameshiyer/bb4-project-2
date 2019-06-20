@@ -1,7 +1,10 @@
 html,
+
 body,
-#map-id {
+#map-soyoung {
   height: 100%;
+  max-width: 100%;
+  background-color:#121212;
   padding: 0;
   margin: 0;
 }

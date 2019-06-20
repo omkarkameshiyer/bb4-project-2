@@ -56,10 +56,22 @@ hs.properties.fill = am4core.color("#FFB6C1");
 d3.json('/jsonShootingData').then(function(response){
   console.log(Object.entries(response));
   })
-// var 1970
 
 
-// var mapImageSeries = mapChart.series.push(new am4maps.MapImageSeries());
+// Creating map image(marker) series
+var mapImageSeries = mapChart.series.push(new am4maps.MapImageSeries());
+
+var shootImageSeriesTemplate = mapImageSeries.mapImages.template;
+
+var shootImage = shootImageSeriesTemplate.createChild(am4core.Image);
+shootImage.href = "./static/images/shoot_marker.png"
+shootImage.width = 20;
+shootImage.height = 20;
+shootImage.nonScaling = true;
+shootImage.tooltipText = "{title}";
+shootImage.horizontalCenter = "middle";
+shootImage.verticalCenter = "bottom";
+
 // var pyongyang = mapImageSeries.mapImages.create();
 // pyongyang.longitude = 125.739708;
 // pyongyang.latitude = 39.034333;
@@ -87,7 +99,7 @@ d3.json('/jsonShootingData').then(function(response){
 // // koreaText.horizontalCenter = "right";
 // // koreaText.paddingRight = 15;
 
-// var bomb = mapImageSeries.mapImages.create();
+var shoot = mapImageSeries.mapImages.create();
 // bomb.longitude = 125.739708;
 // bomb.latitude = 39.034333;
 // bomb.nonScaling = true;
