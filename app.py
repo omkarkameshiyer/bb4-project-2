@@ -24,10 +24,27 @@ def index():
     """Return the homepage."""
     return render_template("index.html")
 
+
 @app.route("/MarkerClusters")
 def MakerClusters():
     """Marker Clusters"""
     return render_template("MarkerClusters.html")
+
+
+@app.route('/csvtable')
+def getCsvAsATable():
+    dataset = tablib.Dataset()
+    with open('./db/schoolShootingData_withGeoCoordinates.csv', 'r', encoding="utf8") as file:
+        data = file.read()
+    dataset.csv =data
+    return dataset.html
+
+
+@app.route('/csvshootingdata')
+def getCsv():
+    with open('./db/schoolShootingData_withGeoCoordinates.csv', 'r', encoding="utf8") as file:
+        data = file.read() + '\n'
+    return (repr(data))  
 
 
 @app.route('/jsonShootingData')
