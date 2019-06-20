@@ -16,39 +16,48 @@ L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 var parseTime = d3.timeParse("%B %d, %Y");
 
 // Load data from JSON
-var url = "http://127.0.0.1:5000/jsonShootingData";
+var url = "/jsonShootingData";
 
-d3.json(url, function(error, url) {
+d3.json(url, function(error, shootingData) {
   // if (error) throw error;
   console.log("Shooting data loaded!");
+1/0;
+  // Create a new marker cluster group
+  var markers = L.markerClusterGroup();
 
-  // // Create a new marker cluster group
-  // var markers = L.markerClusterGroup();
+  // Format the date and cast the miles value to a number
+  shootingData.forEach(function(data) {
+    data.Date = parseTime(data.Date);
+    // Set the data location property to a variable
+    // console.log(data.location);
 
-  // // Format the date and cast the miles value to a number
-  // shootingData.forEach(function(data) {
-  //   data.Date = parseTime(data.Date);
-  //   // Set the data location property to a variable
-  //   var location = data.Location.replace(/\'/g, "\"");
-  //   try {
-  //     location = JSON.parse(location);
-  //     // Add a new marker to the cluster group and bind a pop-up
-  //     markers.addLayer(L.marker([location.lat, location.lng])
-  //       // .bindPopup(data.Summary));
-  //            .bindPopup("Date: " + data.Date + "<br>" +
-  //                       "State: " + data.State + "<br>" +
-  //                       "City: " + data.City + "<br>" +
-  //                       "School: " + data.School + "<br>" +
-  //                       "Killed (includes shooter): " + data.Killed.toString() + "<br>" +
-  //                       "Summary: " + data.Summary
-  //                       ));
-  //   } catch {
-  //     console.log('Invalid location');
-  //   }
-  // });
+    // try {
+      
+      //var loc = data.location.replace(/\'/g, "\"");
+      //var loc = JSON.parse(data.location);
+      var loc = data.location;
 
-  // // Add our marker cluster layer to the map
-  // myMap.addLayer(markers);
+      console.log(data.location);
+      // var loc = data.location.replace(/\'/g, "\"");
+      
+      // Add a new marker to the cluster group and bind a pop-up
+      try{
+      markers.addLayer(L.marker([loc.lat, loc.lng])
+        // .bindPopup(data.Summary));
+             .bindPopup("Date: " + data.Date + "<br>" +
+                        "State: " + data.State + "<br>" +
+                        "City: " + data.City + "<br>" +
+                        "School: " + data.School + "<br>" +
+                        "Killed (includes shooter): " + data.Killed.toString() + "<br>" +
+                        "Summary: " + data.Summary
+                        ));
+     } catch {
+       console.log(data);
+     }
+  });
+
+  // Add our marker cluster layer to the map
+  myMap.addLayer(markers);
 });
 
 

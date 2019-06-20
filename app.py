@@ -13,12 +13,25 @@ from flask_sqlalchemy import SQLAlchemy
 import csv  
 import json  
 
+
+def to_json(row):
+    try:
+        return json.loads(row)
+    except:
+        return {}
+
+
 app = Flask(__name__, static_url_path='/static')
 
 @app.route("/")
 def index():
     """Return the homepage."""
-    return render_template("index.html")
+    return app.send_static_file('index.html')
+
+@app.route("/MarkerClusters")
+def MakerClusters():
+   """Marker Clusters"""
+   return render_template("MarkerClusters.html")
 
 @app.route('/csvtable')
 def getCsvAsATable():
@@ -34,11 +47,15 @@ def getCsv():
     	data = file.read() + '\n'
     return (repr(data))	
 
+
 @app.route('/jsonShootingData')
 def getShooting():
    data_file = './db/schoolShootingData_withGeoCoordinates.csv'
    data_file_pd = pd.read_csv(data_file, encoding='utf8')
    df = pd.DataFrame(data_file_pd)
+   df["location"] = df["location"].map(lambda l: to_json(l.replace("'", '"')))
+   df.fillna('NaN',inplace=True)
+
    return jsonify(df.to_dict(orient="records"))
 
 if __name__ == "__main__":
