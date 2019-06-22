@@ -12,32 +12,24 @@ L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
   accessToken: API_KEY
 }).addTo(myMap);
 
+// Load data from JSON
+var url = "/jsonShootingData";
 
-var parseTime = d3.timeParse("%B %d, %Y");
-
-// Load data from CSV
-d3.text("/getcsvdatafile").then(function(text) {
-  console.log(text); // Hello, world!
-});
-/*
-d3.csv("csv/SchoolShootingData_withGeoCoordinates.csv", function(error, shootingData) {
-  if (error) throw error;
-  console.log(shootingData);
-
+d3.json(url, function(error, shootingData) {
+  // if (error) throw error;
+  console.log("Shooting data loaded!");
   // Create a new marker cluster group
   var markers = L.markerClusterGroup();
 
   // Format the date and cast the miles value to a number
   shootingData.forEach(function(data) {
-    data.date = parseTime(data.date);
     // Set the data location property to a variable
-    var location = data.location.replace(/\'/g, "\"");
-    try {
-      location = JSON.parse(location);
-      // Add a new marker to the cluster group and bind a pop-up
-      markers.addLayer(L.marker([location.lat, location.lng])
-        // .bindPopup(data.Summary));
-             .bindPopup("Date: " + data.Date + "<br>" +
+    var loc = data.location;
+    
+    // Add a new marker to the cluster group and bind a pop-up
+    try{
+      markers.addLayer(L.marker([loc.lat, loc.lng])
+              .bindPopup("Date: " + data.Date + "<br>" +
                         "State: " + data.State + "<br>" +
                         "City: " + data.City + "<br>" +
                         "School: " + data.School + "<br>" +
@@ -45,11 +37,10 @@ d3.csv("csv/SchoolShootingData_withGeoCoordinates.csv", function(error, shooting
                         "Summary: " + data.Summary
                         ));
     } catch {
-      console.log('Invalid location');
+      console.log(data);
     }
   });
 
   // Add our marker cluster layer to the map
   myMap.addLayer(markers);
-});*/
-
+});
