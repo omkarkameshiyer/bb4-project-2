@@ -60,7 +60,7 @@ Base = automap_base()
 Base.prepare(engine, reflect=True)
 
 
-# Save reference to the table
+
 
 
 @app.before_first_request
@@ -120,8 +120,10 @@ def send():
 @app.route("/votedata")
 def list_voter():
     """Return a list of voting data including the name, age, response of each vote"""
-    # Query all passengers
+
+    # Save reference to the table
     Voters = Base.classes.survey
+    # Query all passengers
     results = session.query(Voters.name, Voters.age, Voters.question1, Voters.question2).all()
 
     # Create a dictionary from the row data and append to a list of all_passengers
