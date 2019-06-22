@@ -90,10 +90,18 @@ def index():
     """Return the homepage."""
     return app.send_static_file('index.html')
 
+
+@app.route("/Choropleth")
+def Choropleth():
+   """Choropleth"""
+   return render_template("Choropleth.html")
+
+
 @app.route("/MarkerClusters")
 def MarkerClusters():
    """Marker Clusters"""
    return render_template("MarkerClusters.html")
+
 
 @app.route('/csvtable')
 def getCsvAsATable():
@@ -121,6 +129,30 @@ def getShooting():
    df.fillna('NaN',inplace=True)
 
    return jsonify(df.to_dict(orient="records"))
+
+
+@app.route('/geoJsonShootingData')
+def getGeoShooting():
+    data_file = './db/schoolShootingData_withGeoCoordinates.csv'
+    data_file_pd = pd.read_csv(data_file, encoding='utf8')
+    df = pd.DataFrame(data_file_pd)
+    df["location"] = df["location"].map(lambda l: to_json(l.replace("'", '"')))
+    df.fillna('NaN',inplace=True)
+    shooting_dict = df.to_dict(orient="records")
+
+    count = dict()
+    for item in shooting_dict:
+        if(item['State'] not in count):
+            count[item['State']] = 0
+        count[item['State']] += 1
+    print(count)
+    with open('./db/us-states.json') as json_file:
+        geo_data = json.load(json_file)
+        for item in geo_data['features']:
+            if item['properties']['name'] in count:
+                item['properties']['count'] = count[item['properties']['name']]
+        return jsonify(geo_data)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

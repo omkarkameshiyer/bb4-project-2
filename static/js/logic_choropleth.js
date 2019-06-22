@@ -1,7 +1,7 @@
 // Creating map object
 var myMap = L.map("map", {
-  center: [40.7128, -74.0059],
-  zoom: 11
+  center: [39.8283, -98.5795],
+  zoom: 4
 });
 
 // Adding tile layer
@@ -12,20 +12,15 @@ L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
   accessToken: API_KEY
 }).addTo(myMap);
 
-// Link to GeoJSON
-var APILink = "http://data.beta.nyc//dataset/d6ffa9a4-c598-4b18-8caf-14abde6a5755/resource/74cdcc33-512f-439c-" +
-"a43e-c09588c4b391/download/60dbe69bcd3640d5bedde86d69ba7666geojsonmedianhouseholdincomecensustract.geojson";
+var link = "/geoJsonShootingData";
 
-var geojson;
-
-// Grab data with d3
-d3.json(APILink, function(data) {
-
+// Grabbing our GeoJSON data..
+d3.json(link, function(data) {
   // Create a new choropleth layer
   geojson = L.choropleth(data, {
 
     // Define what  property in the features to use
-    valueProperty: "MHI",
+    valueProperty: "count",
 
     // Set color scale
     scale: ["#ffffb2", "#b10026"],
@@ -44,8 +39,7 @@ d3.json(APILink, function(data) {
 
     // Binding a pop-up to each layer
     onEachFeature: function(feature, layer) {
-      layer.bindPopup(feature.properties.LOCALNAME + ", " + feature.properties.State + "<br>Median Household Income:<br>" +
-        "$" + feature.properties.MHI);
+      layer.bindPopup(feature.properties.name + "<br>Shooting Incident Count:<br>" + feature.properties.count);
     }
   }).addTo(myMap);
 
@@ -58,7 +52,7 @@ d3.json(APILink, function(data) {
     var labels = [];
 
     // Add min & max
-    var legendInfo = "<h1>Median Income</h1>" +
+    var legendInfo = "<h1>Shooting Count</h1>" +
       "<div class=\"labels\">" +
         "<div class=\"min\">" + limits[0] + "</div>" +
         "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
@@ -76,5 +70,4 @@ d3.json(APILink, function(data) {
 
   // Adding legend to the map
   legend.addTo(myMap);
-
 });
