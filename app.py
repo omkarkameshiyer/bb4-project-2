@@ -81,9 +81,9 @@ def index():
 
 ##################################################
 @app.route("/timeSeries")
-def index():
+def timeSeries():
     """timeSeries map and chart."""
-    return render_template('timeSeires.html')
+    return render_template('timeSeries.html')
 ##################################################
 @app.route("/Choropleth")
 def Choropleth():
