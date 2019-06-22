@@ -119,11 +119,6 @@ def getCsv():
     return (repr(data))  
 
 
-
-
-
-
-
 @app.route("/send", methods=["GET", "POST"])
 def send():
 
