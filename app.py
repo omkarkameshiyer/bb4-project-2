@@ -209,6 +209,24 @@ def getGeoShooting():
                 item['properties']['count'] = count[item['properties']['name']]
         return jsonify(geo_data)
 
+##################################################
+## Omkar's : trends Data
+##################################################
+
+@app.route("/trends")
+def trendsGoogle():
+    """Return the homepage."""
+    return render_template("googleTrends.html")
+
+@app.route('/google/<labelname>')
+def readFile(labelname):
+    data_file = './db/' + labelname + '.csv'
+    data_file_pd = pd.read_csv(data_file, encoding = 'utf8')
+    df = pd.DataFrame(data_file_pd)# fill empty values(NaN) to prevent SyntaxError in browser
+    df.fillna('NaN', inplace = True)
+    return jsonify(df.to_dict(orient = "records"))
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
