@@ -93,7 +93,12 @@ def Choropleth():
 @app.route("/MarkerClusters")
 def MarkerClusters():
    """Marker Clusters"""
-   return render_template("MarkerClusters.html") 
+   return render_template("MarkerClusters.html")
+##################################################
+@app.route("/IncidentByTimeOfDay")
+def IncidentByTimeOfDay():
+   """Incident By Time of Day"""
+   return render_template("IncidentByTimeOfDay.html")  
 
 
 ##################################################
