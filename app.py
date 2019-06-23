@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 import csv
-import tablib
+import json  
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -16,17 +16,11 @@ from sqlalchemy import create_engine, Column, Integer, String, func
 
 from flask import (Flask, jsonify, render_template, Response, request,redirect)
 from flask_sqlalchemy import SQLAlchemy
-import csv  
-import json  
 
 
-def to_json(row):
-    try:
-        return json.loads(row)
-    except:
-        return {}
-
-
+##################################################
+## Flask and sqlalchemy Setup
+##################################################
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/db.sqlite"
 db = SQLAlchemy(app)
@@ -40,8 +34,7 @@ class Survey(db.Model):
     age = db.Column(db.Integer)
     question1 = db.Column(db.String(64))
     question2 = db.Column(db.String(64))
-    
-    
+   
     def __init__(self, name, age, question1, question2):
         self.name = name
         self.age = age
@@ -51,8 +44,7 @@ class Survey(db.Model):
     def __repr__(self):
         return '<Survey %r>' % (self.name)
     
-
-
+    
 ##################################################
 ## Database Setup
 ##################################################
@@ -62,15 +54,10 @@ engine = create_engine("sqlite:///db/db.sqlite", pool_recycle=1)
 # Create our session (link) from Python to the DB
 session = Session(engine)
 
-
 # reflect an existing database into a new model
 Base = automap_base()
 # reflect the tables
 Base.prepare(engine, reflect=True)
-
-
-
-# Save reference to the table
 
 
 
@@ -84,41 +71,34 @@ def setup():
     #db.session.add(Survey("HuyTest",38,"Yes","Yes"))
    # db.session.commit()
 
-
+##################################################
+## Main Homepage
+##################################################
 @app.route("/")
 def index():
     """Return the homepage."""
-    return app.send_static_file('index.html')
+    return render_template('index.html')
 
-
+##################################################
+@app.route("/timeSeries")
+def timeSeries():
+    """timeSeries map and chart."""
+    return render_template('timeSeries.html')
+##################################################
 @app.route("/Choropleth")
 def Choropleth():
    """Choropleth"""
    return render_template("Choropleth.html")
-
-
+##################################################
 @app.route("/MarkerClusters")
 def MarkerClusters():
    """Marker Clusters"""
-   return render_template("MarkerClusters.html")
+   return render_template("MarkerClusters.html") 
 
 
-@app.route('/csvtable')
-def getCsvAsATable():
-    dataset = tablib.Dataset()
-    with open('./db/schoolShootingData_withGeoCoordinates.csv', 'r', encoding="utf8") as file:
-        data = file.read()
-    dataset.csv =data
-    return dataset.html
-
-
-@app.route('/csvshootingdata')
-def getCsv():
-    with open('./db/schoolShootingData_withGeoCoordinates.csv', 'r', encoding="utf8") as file:
-        data = file.read() + '\n'
-    return (repr(data))  
-
-
+##################################################
+## Huy's : /send, /votedata, /plotdata
+##################################################
 @app.route("/send", methods=["GET", "POST"])
 def send():
 
@@ -128,8 +108,6 @@ def send():
         question1 = request.form["question1"]
         question2 = request.form["question2"]
         
-        
-
         voter = Survey(name=name, age=int(age), question1=question1,question2=question2)
         db.session.add(voter)
         db.session.commit()
@@ -139,12 +117,13 @@ def send():
     return render_template("survey.html")
 
 
-
 @app.route("/votedata")
 def list_voter():
     """Return a list of voting data including the name, age, response of each vote"""
-    # Query all passengers
+
+    # Save reference to the table
     Voters = Base.classes.survey
+    # Query all passengers
     results = session.query(Voters.name, Voters.age, Voters.question1, Voters.question2).all()
 
     # Create a dictionary from the row data and append to a list of all_passengers
@@ -158,8 +137,6 @@ def list_voter():
         all_voters.append(voters_dict)
 
     return jsonify(all_voters)
-
-
 
 
 # create route that returns data for plotting
@@ -179,6 +156,14 @@ def bar():
     return jsonify(trace)
 
 
+##################################################
+## Soyoung and Elise's : /jsonShootingData
+##################################################
+def to_json(row):
+    try:
+        return json.loads(row)
+    except:
+        return {}
 
 @app.route('/jsonShootingData')
 def getShooting():
@@ -193,6 +178,9 @@ def getShooting():
     return jsonify(df.to_dict(orient="records"))
 
 
+##################################################
+## Elise's : /geoJsonShootingData
+##################################################
 @app.route('/geoJsonShootingData')
 def getGeoShooting():
     data_file = './db/schoolShootingData_withGeoCoordinates.csv'
