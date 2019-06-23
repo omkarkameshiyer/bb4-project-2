@@ -79,11 +79,7 @@ def index():
     """Return the homepage."""
     return render_template('index.html')
 
-##################################################
-@app.route("/timeSeries")
-def timeSeries():
-    """timeSeries map and chart."""
-    return render_template('timeSeries.html')
+
 ##################################################
 @app.route("/Choropleth")
 def Choropleth():
@@ -100,6 +96,11 @@ def IncidentByTimeOfDay():
    """Incident By Time of Day"""
    return render_template("IncidentByTimeOfDay.html")  
 
+##################################################
+@app.route("/timeSeries")
+def timeSeries():
+    """timeSeries map and chart."""
+    return render_template('timeSeries.html')
 
 ##################################################
 ## Huy's : /send, /votedata, /plotdata

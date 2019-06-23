@@ -1,3 +1,5 @@
+// reference: https://blog.risingstack.com/d3-js-tutorial-bar-charts-with-javascript/
+
 var incident_counts = [
   {
     period: "Before School",
