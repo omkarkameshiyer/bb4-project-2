@@ -53,8 +53,13 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plots <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="/timeSeries">Time Series</a></li>
+                                <br />
                                 <li><a href="/MarkerClusters">Marker Cluster</a></li>
+                                <br />
                                 <li><a href="/Choropleth">Choropleth</a></li>
+                                <br />
+                                <li><a href="/IncidentByTimeOfDay">Incident by Time of Day</a></li>
+                                <br />
                                 <li><a href="/send">Survey</a></li>
                             </ul>
                         </li><!--dropdown end-->
@@ -73,14 +78,16 @@
                     <div class="col-sm-12 col-md-8">
                         <div class="box">
                             <div class="page-header">
-                                <h1 class="title">Summary: School Shooting</h1>
+                                <h1 class="title">School Shooting Incidents a (1970-present)</h1>
                             </div>
                             <div class="box">
                                 <img src="/static/images/Main.png" alt="Summary chart" height="280" width="280" align="left">
-                                <p class="category"> School Shooting
+                                <p class="category">The School Shooting Database is conducted as
+                                part of the Advanced Thinking in Homeland Security (HSx) program at the Naval Postgraduate School Center for Homeland Defense and Security (CHDS).
                                 </p>
-                                <p class="category"> Blah Blah
+                                <p class="category">Data sourcce:
                                 </p>
+                                <a href="https://www.chds.us/ssdb/dataset/">K-12 School Shooting Database</a>
                             </div>
                         </div>
                     </div>
@@ -91,10 +98,15 @@
                                 <h1 class="title">Visualizations</h1>
                             </div>
                             <div class="box">
-                               <a href="/timeSeries"><img src="/static/images/timeSeriesMain.png" alt="Time Series" height="160" width="160"></a>
                                <a href="/MarkerClusters"><img src="/static/images/Fig2.png" alt="Marker Clusters" height="160" width="160"></a>
                                <a href="/Choropleth"><img src="/static/images/Fig3.png" alt="Choropleth" height="160" width="160"></a>
+<<<<<<< HEAD
                                <a href="/send"><img src="https://eteconline.org/wp-content/uploads/2015/05/Survey-Button.png" alt="Survey" height="160" width="160"></a>
+=======
+                               <a href="/IncidentByTimeOfDay"><img src="/static/images/Fig4.png" alt="Incident By Time of Day" height="160" width="160"></a>
+                               <a href="/timeSeries"><img src="{{ url_for('static', filename='images/timeSeriesMain.png') }}" alt="Time Series" height="160" width="160"></a>
+                               <a href="/send"><img src="/static/images/Fig4.png" alt="Survey" height="160" width="160"></a>
+>>>>>>> 2cb1844f29afaf43bac171f1c540af56c8e68024
                             </div>
                         </div>
                     </div>
@@ -105,14 +117,6 @@
 <footer class="text-center text-uppercase">Coding Bootcamp 2019</footer>
 
 
-  <!-- amCharts Resources
-  <script src="https://www.amcharts.com/lib/4/core.js"></script>
-  <script src="https://www.amcharts.com/lib/4/charts.js"></script>
-  <script src="https://www.amcharts.com/lib/4/maps.js"></script>
-  <script src="https://www.amcharts.com/lib/4/geodata/usaLow.js"></script>
-  <script src="https://www.amcharts.com/lib/4/geodata/worldLow.js"></script>
-  <script src="https://www.amcharts.com/lib/4/themes/dataviz.js"></script>
-  <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script> -->
 
   <!-- MomentJS -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>

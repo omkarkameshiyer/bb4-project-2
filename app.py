@@ -87,11 +87,7 @@ def index():
     """Return the homepage."""
     return render_template('index.html')
 
-##################################################
-@app.route("/timeSeries")
-def timeSeries():
-    """timeSeries map and chart."""
-    return render_template('timeSeries.html')
+
 ##################################################
 @app.route("/Choropleth")
 def Choropleth():
@@ -101,8 +97,18 @@ def Choropleth():
 @app.route("/MarkerClusters")
 def MarkerClusters():
    """Marker Clusters"""
-   return render_template("MarkerClusters.html") 
+   return render_template("MarkerClusters.html")
+##################################################
+@app.route("/IncidentByTimeOfDay")
+def IncidentByTimeOfDay():
+   """Incident By Time of Day"""
+   return render_template("IncidentByTimeOfDay.html")  
 
+##################################################
+@app.route("/timeSeries")
+def timeSeries():
+    """timeSeries map and chart."""
+    return render_template('timeSeries.html')
 
 ##################################################
 ## Huy's : /send, /votedata, /plotdata
@@ -210,7 +216,7 @@ def to_json(row):
 
 @app.route('/jsonShootingData')
 def getShooting():
-    data_file = './db/schoolShootingData_withGeoCoordinates.csv'
+    data_file = './db/schoolShootingData_withGeoCoordinates_delrow811.csv'
     data_file_pd = pd.read_csv(data_file, encoding='utf8')
     df = pd.DataFrame(data_file_pd)
 
@@ -245,6 +251,24 @@ def getGeoShooting():
             if item['properties']['name'] in count:
                 item['properties']['count'] = count[item['properties']['name']]
         return jsonify(geo_data)
+
+##################################################
+## Omkar's : trends Data
+##################################################
+
+@app.route("/trends")
+def trendsGoogle():
+    """Return the homepage."""
+    return render_template("googleTrends.html")
+
+@app.route('/google/<labelname>')
+def readFile(labelname):
+    data_file = './db/' + labelname + '.csv'
+    data_file_pd = pd.read_csv(data_file, encoding = 'utf8')
+    df = pd.DataFrame(data_file_pd)# fill empty values(NaN) to prevent SyntaxError in browser
+    df.fillna('NaN', inplace = True)
+    return jsonify(df.to_dict(orient = "records"))
+
 
 
 if __name__ == "__main__":
