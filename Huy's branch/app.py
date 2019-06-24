@@ -170,7 +170,7 @@ def bar():
         "y": count_1,
         "type": "bar"
     }
-
+    print(justonify(trace))
     return jsonify(trace)
 
 

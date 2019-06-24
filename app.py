@@ -23,8 +23,16 @@ from flask_sqlalchemy import SQLAlchemy
 ##################################################
 ## Flask and sqlalchemy Setup
 ##################################################
+# Postgress DB
 app = Flask(__name__, static_url_path='/static')
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/db.sqlite"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://bbbaxhpiaojdbv:07b607300e23255417213ff951bedd111995a6c10e4bcceea0ae07a6499e2afc@ec2-50-19-254-63.compute-1.amazonaws.com:5432/dfv685d0cppek8"
+
+
+#SQLite DB
+#app = Flask(__name__, static_url_path='/static')
+#app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/db.sqlite"
+
+
 db = SQLAlchemy(app)
 Base = declarative_base()
 
@@ -62,8 +70,12 @@ def setup():
 ##################################################
 ## Database Setup
 ##################################################
-engine = create_engine("sqlite:///db/db.sqlite",  connect_args={'check_same_thread':False},
-                    poolclass=StaticPool)  #pool_recycle=1
+#Postgres Engine
+engine = create_engine("postgres://bbbaxhpiaojdbv:07b607300e23255417213ff951bedd111995a6c10e4bcceea0ae07a6499e2afc@ec2-50-19-254-63.compute-1.amazonaws.com:5432/dfv685d0cppek8",pool_recycle=1)
+
+#SQLite Engine
+#engine = create_engine("sqlite:///db/db.sqlite",  connect_args={'check_same_thread':False},
+#                    poolclass=StaticPool)  #pool_recycle=1
 #
 
 # Create our session (link) from Python to the DB
@@ -203,7 +215,7 @@ def bar():
 
 
 
-
+    
     return jsonify(all_Plots)
 
 
