@@ -173,7 +173,7 @@ def to_json(row):
 
 @app.route('/jsonShootingData')
 def getShooting():
-    data_file = './db/schoolShootingData_withGeoCoordinates.csv'
+    data_file = './db/schoolShootingData_withGeoCoordinates_delrow811.csv'
     data_file_pd = pd.read_csv(data_file, encoding='utf8')
     df = pd.DataFrame(data_file_pd)
 
