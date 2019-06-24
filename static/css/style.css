@@ -1,21 +1,22 @@
-/* color scheme
-https://www.w3schools.com/colors/colors_complementary.asp 
-*/
-
+*{
+  font-family: Ubuntu;
+}
 body{
     background: #F7EDD4;
 }
 
 footer{
-    background: #090934;
-    color: #FCBA12;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #090934;
+  height: 50px;
+  /* background: #091034; */
+  border: 10px;
+  color: #FBA90A;
 }
   /* every box is this size */
-  
-  .skyblue {
-    background: deepskyblue;
-  }
-  
   .box{
     padding: 10px;
     background: white;
@@ -29,10 +30,23 @@ footer{
   
   /* Giving our navbar some padding and a background color */
   .navbar {
-    margin-right: 0px;
-    margin-left: 0px;
-    padding: 25px;
-    background:#FCBA12;
+    background:#FBA90A;
+    margin: 0;
+    border-radius:0;
+  }
+  .navbar-brand {
+    color: #FBA90A;
+    background-color: #F7EBD4;
+
+    margin: 0;
+    border:0 */
+  }
+  .navbar-toggle collapsed {
+    color:  #091034
+  }
+  
+  .navbar-right {
+    color:#091034;
   }
   
   /* Making our navbar li's inline-block elements this makes it so we can have multiple on the same line. Floats could have been used too */
@@ -44,6 +58,7 @@ footer{
     cursor: pointer;
   }
   h1 {
+    font-family: Cabin Sketch;
     font-size: 35px;
   }
   h2 {
@@ -52,15 +67,16 @@ footer{
   
   
   p{
-      font-size: 20px;
+      font-size: 15px;
+      display: block;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
   }
   
   
-  .c-d{color:white;
-    font-size: 25px;
-  }
-  
-  .latitude {
+  .home {
     color: white;
     font-family: verdana;
     font-size: 40px;
@@ -68,7 +84,7 @@ footer{
     padding: 15px;
   }
   /* Adding media queries to show the drop-down, and hide the navbar when the screen is smaller than 480 pixels */
-  @media (max-width: 480px) {
+  /* @media (max-width: 480px) {
     .navbar li {
       padding: 10px;
     }
@@ -82,7 +98,7 @@ footer{
     #nav-select {
       visibility: visible;
     }
-  }
+  } */
   
   /* For desktop: */
   .col-1 {width: 8.33%;}
