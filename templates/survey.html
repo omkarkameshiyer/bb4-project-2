@@ -1,18 +1,94 @@
-<div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>School Shooting Dashboard</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css?family=Sanchez" rel="stylesheet">
+  
+  <!--jQuery-->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <!--Bootstrap components CSS-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+  integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+  crossorigin=""/>
+
+  <!-- Icons -->
+  <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="static/css/style.css">
+  <script src="{{ url_for('static', filename='css/style.css') }}"></script>
+
+  <!--D3-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+
+ 
+  </style>
+</head>
+
+
+
+
+<body style="background-image:url('https://cdn.hipwallpaper.com/i/40/3/tEB0Ru.jpg');">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+  <a class="navbar-brand" href="/">BB4</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/MarkerClusters">Marker Clusters</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/Choropleth">Chropleth</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/IncidentByTimeOfDay">Shooting Times</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/timeSeries">Incident Timeline</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/trends">Trend's Data</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="container"  style="max-width: 400px;margin-left: 1px;background-color:transparent">
     
 
-        <div class="col-sm-4">
+        <div class="col-md-8">
        <div class="jumbotron" style="text-align: center">
       <h1>Take the survey!</h1>
-           <h2><a href="/send" class="btn btn-primary" role="button">Add a Vote!</a></h2>
+          
     </div>
-    </div><
+    </div>
 
 
 </div>
     
-<div>  
-<form method="POST" action="/send">
+<div >  
+<form method="POST" action="/send" >
  <div class="form-group">
     <label for="inputName">Name</label>
     <input type="text" id="inputName" name="name">
@@ -21,16 +97,59 @@
     <label for="inputAge">Age</label>
     <input type="text" id="inputAge" name="age">
  </div>
-   <div class="form-group"> 
-    <label for="inputQuestion1">Question1: Do you think we need stricter gun laws (Yes or No )?</label>
-    <input type="text" id="inputQuestion1" name="question1">
- <div class="form-group">  
-    <label for="inputQuestion2">Question1: Would you like to live in a world where guns did not exist?</label>
-    <input type="text" id="inputQuestion2" name="question2">
+
+  <div>
+  <tr> <td class="form_c">Sex </td><td class="form_c"></td>
+  <td class="form_c">
+    <select input type ="text" id="sex" name = "sex">
+    <option></option>
+    <option>Male</option>
+    <option>Female</option>
+    </select></td>
+<td class="form_c"></td>
+<td class="form_c"></td>
+</tr>
+
+</br>
+</br>
+
+    <tr> 
+      <td class="form_c">Question1: Do you think we need stricter gun laws (Yes or No )?</td><td class="form_c"></td>
+    <td class="form_c">
+      <select input type ="text" id="question1" name = "question1">
+      <option></option>
+      <option>Yes</option>
+      <option>No</option>
+      </select></td>
+  <td class="form_c"></td>
+ </div> 
+<!--  <div class="form-group">  --> 
+    <!-- <label for="inputQuestion2">Question2: Do you believe the 2nd Amendment is outdated?</label> -->
+    <!-- <input type="text" id="inputQuestion2" name="question2"> -->
+ <!-- </div> -->
+</tr>
+</br>
+<div>
+    <tr> 
+      <td class="form_c">Question2: Do you believe the 2nd Amendment is outdated?</td><td class="form_c"></td>
+    <td class="form_c">
+      <select input type ="text" id="question2" name = "question2">
+      <option></option>
+      <option>Yes</option>
+      <option>No</option>
+      </select></td>
+  <td class="form_c"></td>
  </div>
+ </br>
+
     <input type="submit" value="submit">
+
 </form>
-    
+</br>
+</br>    
+</br>
+</br>
+</br>
  <div id="huy">
     
     <div class="container">
@@ -42,7 +161,28 @@
         
       </div>
         <div id="huyplot"></div>
+        <div id="huyplot2"></div>
     </div>
     </div>
 </div>
 </div> 
+
+</body>
+
+ <!-- MomentJS -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+
+  <!-- Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+  integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+  crossorigin=""></script>
+
+  <!-- Icons -->
+  <script src="static/js/leaflet.extra-markers.min.js"></script>
+
+  <!-- polyfill.io is library for using newer JavaScript features in older browers (such as Object.assign) -->
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+  
+  <!-- Our JavaScript -->
+  <script src="{{ url_for('static', filename='js/huy.js') }}"></script>
+</html>

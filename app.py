@@ -1,5 +1,5 @@
 import os
-import datetime
+from datetime import datetime, date
 import pandas as pd
 import numpy as np
 
@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.pool import StaticPool
 from sqlalchemy import create_engine, Column, Integer, String, func
 
 from flask import (Flask, jsonify, render_template, Response, request,redirect)
@@ -29,26 +30,39 @@ Base = declarative_base()
 class Survey(db.Model):
     __tablename__ = 'survey'
 
-    id = db.Column(db.BigInteger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True) #BigInteger()
     name = db.Column(db.String(64))
     age = db.Column(db.Integer)
+    sex = db.Column(db.String(64))
     question1 = db.Column(db.String(64))
     question2 = db.Column(db.String(64))
+    timestamp = db.Column(db.String, nullable= False)          #= 
    
-    def __init__(self, name, age, question1, question2):
+    def __init__(self, name, age,sex, question1, question2, timestamp):
         self.name = name
         self.age = age
+        self.sex = sex
         self.question1 = question1
         self.question2 = question2
+        self.timestamp = timestamp
         
     def __repr__(self):
         return '<Survey %r>' % (self.name)
     
-    
+@app.before_first_request
+def setup():
+    # Recreate database each time for demo
+    #db.drop_all()
+    db.create_all()
+    # db.session.add(Survey(1,"HuyTest",38,"Yes","Yes"))
+    # db.session.commit()
+
+
 ##################################################
 ## Database Setup
 ##################################################
-engine = create_engine("sqlite:///db/db.sqlite", pool_recycle=1)
+engine = create_engine("sqlite:///db/db.sqlite",  connect_args={'check_same_thread':False},
+                    poolclass=StaticPool)  #pool_recycle=1
 #
 
 # Create our session (link) from Python to the DB
@@ -63,13 +77,7 @@ Base.prepare(engine, reflect=True)
 
 
 
-@app.before_first_request
-def setup():
-    # Recreate database each time for demo
-    #db.drop_all()
-    db.create_all()
-    #db.session.add(Survey("HuyTest",38,"Yes","Yes"))
-   # db.session.commit()
+
 
 ##################################################
 ## Main Homepage
@@ -111,10 +119,14 @@ def send():
     if request.method == "POST":
         name = request.form["name"]
         age = request.form["age"]
+        sex = request.form["sex"]
         question1 = request.form["question1"]
         question2 = request.form["question2"]
         
-        voter = Survey(name=name, age=int(age), question1=question1,question2=question2)
+        nowTime = datetime.now().strftime("%F")
+        print(nowTime)
+
+        voter = Survey(name=name, age=int(age), sex=sex, question1=question1,question2=question2,timestamp=nowTime) 
         db.session.add(voter)
         db.session.commit()
 
@@ -130,16 +142,18 @@ def list_voter():
     # Save reference to the table
     Voters = Base.classes.survey
     # Query all passengers
-    results = session.query(Voters.name, Voters.age, Voters.question1, Voters.question2).all()
+    results = session.query(Voters.name, Voters.age, Voters.sex, Voters.question1, Voters.question2, Voters.timestamp).all()
 
     # Create a dictionary from the row data and append to a list of all_passengers
     all_voters = []
-    for name, age, question1,question2 in results:
+    for name, age, sex, question1, question2, timestamp in results:
         voters_dict = {}
         voters_dict["name"] = name
         voters_dict["age"] = age
+        voters_dict["sex"] = sex
         voters_dict["question1"] = question1
-        voters_dict["question2"] = question1
+        voters_dict["question2"] = question2
+        voters_dict["timestamp"] = timestamp
         all_voters.append(voters_dict)
 
     return jsonify(all_voters)
@@ -148,18 +162,47 @@ def list_voter():
 # create route that returns data for plotting
 @app.route("/plotdata")
 def bar():
+    
+    all_Plots = []
+
+    #Plot data for Question 1
     results = db.session.query(Survey.question1, func.count(Survey.question1)).group_by(Survey.question1).all()
+
+    
 
     result_1 = [result[0] for result in results]
     count_1 = [result[1] for result in results]
 
-    trace = {
+    plot_question1 = {
+        "x": result_1,
+        "y": count_1,
+        "type": "bar"
+    }
+    
+
+    all_Plots.append(plot_question1)
+
+
+    #Plot data for question #2
+    results = db.session.query(Survey.question2, func.count(Survey.question1)).group_by(Survey.question2).all()
+
+    result_1 = [result[0] for result in results]
+    count_1 = [result[1] for result in results]
+
+    plot_question2 = {
         "x": result_1,
         "y": count_1,
         "type": "bar"
     }
 
-    return jsonify(trace)
+    all_Plots.append(plot_question2)
+
+
+
+
+
+
+    return jsonify(all_Plots)
 
 
 ##################################################
