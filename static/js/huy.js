@@ -13,13 +13,21 @@ function buildPlot() {
     
 
     var layout = {
-      title: "Question #1 Do you think we need stricter gun laws?",
+      title: {
+        text:"Question #1 Do you think we need stricter gun laws?",
+        font: {color: "rgba(255,255,255, 1)",
+               size: 18}
+      },
       xaxis: {
-        title: "Voter Sentiment"
+        title: "Voter Sentiment",
+        color: "rgba(255,255,255, 1)"
       },
       yaxis: {
-        title: "Number of Votes"
-      }
+        title: "Number of Votes",
+        color: "rgba(255,255,255, 1)"
+      },
+       paper_bgcolor: 'rgba(0,0,0,0)',
+      plot_bgcolor: 'rgba(0,0,0,0)'
     };
 
     Plotly.newPlot("huyplot", [data1], layout, {responsive:true});
@@ -43,13 +51,21 @@ function testPlot() {
   
 
     var layout = {
-      title: "Would you like to live in a world where guns did not exist?",
+      title: {
+        text: "Do you believe the 2nd Amendment is outdated? ",
+        font: {color: "rgba(255,255,255, 1)",
+               size: 18}
+      },
       xaxis: {
-        title: "Voter Sentiment"
+        title: "Voter Sentiment",
+        color: "rgba(255,255,255, 1)"
       },
       yaxis: {
-        title: "Number of Votes"
-      }
+        title: "Number of Votes",
+        color: "rgba(255,255,255, 1)"
+      },
+       paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)'
     };
     console.log(layout.title)
     Plotly.newPlot("huyplot2", [data2], layout, {responsive:true});

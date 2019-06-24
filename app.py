@@ -19,6 +19,7 @@ from flask import (Flask, jsonify, render_template, Response, request,redirect)
 from flask_sqlalchemy import SQLAlchemy
 
 
+
 ##################################################
 ## Flask and sqlalchemy Setup
 ##################################################
@@ -169,14 +170,15 @@ def bar():
     results = db.session.query(Survey.question1, func.count(Survey.question1)).group_by(Survey.question1).all()
 
     
-
+    print(results)
     result_1 = [result[0] for result in results]
     count_1 = [result[1] for result in results]
 
     plot_question1 = {
         "x": result_1,
         "y": count_1,
-        "type": "bar"
+        "type": "bar",
+
     }
     
 
