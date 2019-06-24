@@ -74,99 +74,138 @@
 </nav>
 
 
-<div class="container"  style="max-width: 400px;margin-left: 1px;background-color:transparent">
+<div class="container-fluid"  style="margin-left: 1px;background-color:transparent">
     
-
-        <div class="col-md-8">
+<div class="row">
+        <div class="col-md-3">
        <div class="jumbotron" style="text-align: center">
       <h1>Take the survey!</h1>
           
     </div>
+        </div>
+     <div class="col-md-3">
     </div>
-
-
+    <div class="col-md-3">
+        <br>
+        <br>
+        <br>
+            &nbsp;&nbsp;<button data-toggle="collapse" data-target="#demo" style="text-align: center">See Today's Results!</button>
+    </div>
 </div>
-    
-<div >  
-<form method="POST" action="/send" >
- <div class="form-group">
-    <label for="inputName">Name</label>
-    <input type="text" id="inputName" name="name">
- </div>
- <div class="form-group">  
-    <label for="inputAge">Age</label>
-    <input type="text" id="inputAge" name="age">
- </div>
+</div>
 
-  <div>
-  <tr> <td class="form_c">Sex </td><td class="form_c"></td>
-  <td class="form_c">
-    <select input type ="text" id="sex" name = "sex">
-    <option></option>
-    <option>Male</option>
-    <option>Female</option>
-    </select></td>
-<td class="form_c"></td>
-<td class="form_c"></td>
-</tr>
 
-</br>
-</br>
+<div class="container-fluid" >
+    <div class="row" style=" height:500px">    
+        <div class="col-4">  
+            <br><br><br><br>
+            <form method="POST" action="/send" >
+                <div class="form-group">
+                    <label for="inputName">Name&nbsp;&nbsp;</label>
+                    <input type="text" id="inputName" name="name">
+                </div>
+                
+                <div class="form-group">  
+                    <label for="inputAge">Age&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                    <input type="text" id="inputAge" name="age">
+                </div>
 
-    <tr> 
-      <td class="form_c">Question1: Do you think we need stricter gun laws (Yes or No )?</td><td class="form_c"></td>
-    <td class="form_c">
-      <select input type ="text" id="question1" name = "question1">
-      <option></option>
-      <option>Yes</option>
-      <option>No</option>
-      </select></td>
-  <td class="form_c"></td>
- </div> 
-<!--  <div class="form-group">  --> 
-    <!-- <label for="inputQuestion2">Question2: Do you believe the 2nd Amendment is outdated?</label> -->
-    <!-- <input type="text" id="inputQuestion2" name="question2"> -->
- <!-- </div> -->
-</tr>
-</br>
-<div>
-    <tr> 
-      <td class="form_c">Question2: Do you believe the 2nd Amendment is outdated?</td><td class="form_c"></td>
-    <td class="form_c">
-      <select input type ="text" id="question2" name = "question2">
-      <option></option>
-      <option>Yes</option>
-      <option>No</option>
-      </select></td>
-  <td class="form_c"></td>
- </div>
- </br>
+                <div>
+                    <tr> <td class="form_c">Sex&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </td>
+<!--                        <td class="form_c"></td>-->
+                        <td class="form_c">
+                            <select input type ="text" id="sex" name = "sex">
+                                <option></option>
+                                <option>Male</option>
+                                <option>Female</option>
+                        </select></td>
+<!--
+                    <td class="form_c"></td>
+                    <td class="form_c"></td>
+-->
+                    </tr>
+                </div>
 
-    <input type="submit" value="submit">
+<br>
 
-</form>
-</br>
-</br>    
-</br>
-</br>
-</br>
- <div id="huy">
-    
-    <div class="container">
-    
-   
-    
-      <div class="col-md-8">
-        <h2>Today's Poll: Gun Laws</h2>
+                <div>
+                    <tr> 
+                        <td class="form_c">Question1:<br>Do you think we need stricter gun laws (Yes or No )?&nbsp;&nbsp;</td>
+<!--
+                        <td class="form_c"></td>
+                        <td class="form_c">
+-->
+                        <select input type ="text" id="question1" name = "question1">
+                            <option></option>
+                                <option>Yes</option>
+                                <option>No</option>
+                        </select>
+                    
+                    <td class="form_c"></td>
+                    </tr>
+                </div>
+<br>
+                <div>
+                    <tr> 
+                    <td class="form_c">Question2:<br>Do you believe the 2nd Amendment is outdated?&nbsp;&nbsp;</td>
+                    <td class="form_c">
+                        <select input type ="text" id="question2" name = "question2">
+                            <option></option>
+                                <option>Yes</option>
+                                <option>No</option>
+                        </select>
+                    </td>
+                    <td class="form_c"></td>
+                </div>
+<br>
+
+            <input type="submit" value="submit"></input>
+
+            </form>
+        </div>
+
         
-      </div>
-        <div id="huyplot"></div>
-        <div id="huyplot2"></div>
-    </div>
-    </div>
-</div>
-</div> 
 
+        <div class="col-4"> 
+            
+            <div id="demo" class="collapse">
+       
+                <div  id="huyplot"></div>
+                                                 
+                                
+            </div>    
+        </div>
+        <div class="col-4"> 
+            
+            <div id="demo" class="collapse">
+       
+                <div  id="huyplot2"></div>
+                                                 
+                                
+            </div>    
+        </div>
+    </div>
+         
+</div>
+  
+<div class="container-fluid" >
+
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 </body>
 
  <!-- MomentJS -->
