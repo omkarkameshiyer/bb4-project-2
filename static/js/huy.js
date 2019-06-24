@@ -52,7 +52,7 @@ function testPlot() {
 
     var layout = {
       title: {
-        text: "Do you believe the 2nd Amendment is outdated?",
+        text: "Do you believe the 2nd Amendment is outdated? ",
         font: {color: "rgba(255,255,255, 1)",
                size: 18}
       },

@@ -167,7 +167,7 @@ def bar():
     all_Plots = []
 
     #Plot data for Question 1
-    results = db.session.query(Survey.question1, func.count(Survey.question1)).group_by(Survey.sex).all()
+    results = db.session.query(Survey.question1, func.count(Survey.question1)).group_by(Survey.question1).all()
 
     
     print(results)
