@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>School Shooting Dashboard</title>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css?family=Cabin+Sketch:bold" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+<head>
+    <title>School Shooting Dashboard</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Cabin+Sketch:bold" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 
     <!--jQuery-->
-    <script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
-  <!--Bootstrap components-->
+    <!--Bootstrap components-->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -28,20 +26,20 @@
 
 
 
-  <!-- Leaflet CSS
+    <!-- Leaflet CSS
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
   integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
   crossorigin=""/>-->
 
-  <!-- Icons
+    <!-- Icons
   <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"> -->
 
-  <!-- CSS -->
-  <link rel="stylesheet" type="text/css" href="static/css/style.css">
-  <link rel="stylesheet" type="text/css" href="static/css/style_Huy.css">
-  <script src="{{ url_for('static', filename='css/style.css') }}"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/style_Huy.css">
+    <script src="{{ url_for('static', filename='css/style.css') }}"></script>
 
-  <!-- D3
+    <!-- D3
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script> -->
 
 
@@ -50,7 +48,7 @@
 <body>
     <nav class="navbar navbar-default">
         <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
+            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <a class="navbar-brand" id="home" href="/">Home</a>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -60,29 +58,32 @@
                     <span class="icon-bar"></span>
                 </button>
 
-            </div><!--navbar-header-->      
-        
+            </div>
+            <!--navbar-header-->
+
             <!-- Collect the nav links and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
 
-                        <li><a class="nav-link" href="/MarkerClusters">Marker Cluster</a></li>
+                    <li><a class="nav-link" href="/MarkerClusters">Marker Cluster</a></li>
 
-                        <li><a class="nav-link" href="/Choropleth">Choropleth</a></li>
+                    <li><a class="nav-link" href="/Choropleth">Choropleth</a></li>
 
-                        <li><a class="nav-link" href="/IncidentByTimeOfDay">Incident by Time of Day</a></li>
+                    <li><a class="nav-link" href="/IncidentByTimeOfDay">Incident by Time of Day</a></li>
 
-                        <li><a class="nav-link" href="/timeSeries">Time Series</a></li>
+                    <li><a class="nav-link" href="/timeSeries">Time Series</a></li>
 
-                        <li><a class="nav-link" href="/send">Survey</a></li>
+                    <li><a class="nav-link" href="/send">Survey</a></li>
 
-                    </ul>
-                </div><!-- /.navbar-collapse -->
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
 
-            </div><!-- /.container- -->
-        </nav>
+        </div>
+        <!-- /.container- -->
+    </nav>
 
-        
+
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -97,51 +98,52 @@
                         <p class="category">Data source:</p>
                         <a href="https://www.chds.us/ssdb/dataset/">K-12 School Shooting Database</a>
 
-                        <p class="category">The School Shooting Database is developed as
-                        part of the Advanced Thinking in Homeland Security (HSx) program at the Naval Postgraduate School Center for Homeland Defense and Security (CHDS).
+                        <p class="category">The School Shooting Database is developed as part of the Advanced Thinking in Homeland Security (HSx) program at the Naval Postgraduate School Center for Homeland Defense and Security (CHDS).
                         </p>
                         <hr>
                         <h1>Summary</h1>
-                            <li>Elise</li>
+                        <li>Elise</li>
 
-                            <li>The number of school shooting incidents gradually increased from 1970 to the present.</li>
-                            Peaks: 1988 (38), 1993 (42), 2006 (59), 2018 (97)
+                        <li>The number of school shooting incidents gradually increased from 1970 to the present.</li>
+                        Peaks: 1988 (38), 1993 (42), 2006 (59), 2018 (97)
 
-                            <li>Omkar</li>
-                        
-                            <li>With the power of the internet we can poll anyone, any where at any moment. Let's take a quick poll</li>
-                                
+                        <li>Omkar</li>
+                        <li>TThere is a direct correlation between a shooting incident and a spike in search for related terms.</li>
+
+
+
+                        <li>With the power of the internet we can poll anyone, any where at any moment. Let's take a quick poll</li>
+
                     </div>
                 </div>
 
-            </div> <!--end row -->
+            </div>
+            <!--end row -->
         </div>
     </div>
-</div>
+    </div>
 
-<footer class="text-center text-uppercase">UC Berkeley Data Bootcamp 2019 | Team BB4</footer>
+    <footer class="text-center text-uppercase">UC Berkeley Data Bootcamp 2019 | Team BB4</footer>
 
 
 
-  <!-- MomentJS -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+    <!-- MomentJS -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
 
-  <!-- Leaflet JavaScript -->
-  <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
-  integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
-  crossorigin=""></script>
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" crossorigin=""></script>
 
-  <!-- Icons -->
-  <script src="static/js/leaflet.extra-markers.min.js"></script>
+    <!-- Icons -->
+    <script src="static/js/leaflet.extra-markers.min.js"></script>
 
-  <!-- polyfill.io is library for using newer JavaScript features in older browers (such as Object.assign) -->
-  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <!-- polyfill.io is library for using newer JavaScript features in older browers (such as Object.assign) -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 
-  <!-- API Key -->
-  <!-- <script type="text/javascript" src="js/config.js"></script> -->
+    <!-- API Key -->
+    <!-- <script type="text/javascript" src="js/config.js"></script> -->
 
-  <!-- Our JavaScript -->
-  <!-- <script type="text/javascript" src="static/js/logic.js"></script> -->
+    <!-- Our JavaScript -->
+    <!-- <script type="text/javascript" src="static/js/logic.js"></script> -->
 
 </body>
 

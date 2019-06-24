@@ -15,18 +15,21 @@ container.height = am4core.percent(100);
 // creating a map chart inside container. map instance///////
 var mapChart = container.createChild(am4maps.MapChart);
 mapChart.width = am4core.percent(100);
-mapChart.height = am4core.percent(70);
+mapChart.height = am4core.percent(50);
 mapChart.valign = "top";
 
-var title = mapChart.titles.create();
-title.text = "50 Years of School Shooting History";
-title.fontSize = 25;
-title.margin = (20,0,0,0);
+// label for this map and chart
+var label = container.createChild(am4core.Label);
+label.text = "1970";
+label.size = "20px";
+label.valign = "top";
+label.align = "center";
+label.padding(10, 10, 10, 10);
 
 // zoom control
 mapChart.mouseWheelBehavior = "none";
-// mapChart.zoomControl = new am4maps.ZoomControl();
-// mapChart.zoomControl.slider.height = 100;
+mapChart.zoomControl = new am4maps.ZoomControl();
+mapChart.zoomControl.slider.height = 50;
 
 // Set map definition to usa low(low definition map)
 try {
@@ -58,22 +61,23 @@ polygonTemplate.tooltipText = "{name}";
 polygonTemplate.strokeOpacity = 0.5;
 // Create hover state and set alternative fill color
 var hs = polygonTemplate.states.create("hover");
-hs.properties.fill = am4core.color("#FFB6C1");
+hs.properties.fill = am4core.color("#FF4500");
 
 
 // Creating map image(marker) series
 var mapImageSeries = mapChart.series.push(new am4maps.MapImageSeries());
 
 var mapImageSeriesTemplate = mapImageSeries.mapImages.template;
-var shootImage = mapImageSeriesTemplate.createChild(am4core.Image);
-shootImage.href = "./static/images/red_marker.png"
+var shootImage = mapImageSeriesTemplate.createChild(am4core.Circle);
+// shootImage.href = "./static/images/red_marker.png"
 // marker.href = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-160/marker.svg" //blue&green marker;
 // bombImage.href = "//www.amcharts.com/wp-content/uploads/2018/11/rocket.png";
 // bangImage.href = "https://www.amcharts.com/wp-content/uploads/2018/11/bang.png";
-shootImage.width = 30;
-shootImage.height = 30;
+shootImage.radius = 4;
+shootImage.fill = am4core.color("#FC0000");
+// shootImage.stroke = am4core.color("#F7EDD4");
+shootImage.strokeWidth = 1;
 shootImage.nonScaling = true;
-// shootImage.tooltipText = "{title}";
 shootImage.horizontalCenter = "bottom";
 shootImage.verticalCenter = "bottom";
 shootImage.tooltip = new am4core.Tooltip();
@@ -94,7 +98,7 @@ mapLineSeries.mapLines.template.line.strokeOpacity = 0.5;
 mapLineSeries.mapLines.template.line.strokeWidth = 3;
 mapLineSeries.mapLines.template.line.strokeDasharray = "3,3";
 
-
+// map data empty array prep
 let shoot1970 = [];
 let shoot1971 = [];
 let shoot1972 = [];
@@ -150,14 +154,18 @@ let shoot2017 = [];
 let shoot2018 = [];
 let shoot2019 = [];
 
-let shoot7019 = [];
+let mapData={};
+let shoot7019 = []; // array for accumulated markers 1970-2019
+
+// empty array for chart data
 let xyData = {};
 let xyDataArr = [];
 
 d3.json('/jsonShootingData').then(function(response){
-  console.log(response);
+  // console.log(response);
   for (i = 0; i<response.length; i++) {
-    var year = new Date(response[i].Date);
+    var year = new Date(response[i].Date).getFullYear();
+    // console.log(year);
     let shootLoc = {latitude : response[i].location.lat, 
                     longitude : response[i].location.lng, 
                     school : response[i].School,
@@ -165,144 +173,217 @@ d3.json('/jsonShootingData').then(function(response){
                     state : response[i].State };
 
     shoot7019.push(shootLoc);
-    
-    var currentYear = new Date(response[i].Date).getFullYear();
-    if (currentYear in xyData) {
-      xyData[currentYear] += 1;
+
+            if (year>=1970 && year<1971) {
+        shoot1970.push(shootLoc);
+      } else if (year>=1971 && year<1972) {
+        shoot1971.push(shootLoc);
+      } else if (year>=1972 && year<1973) {
+        shoot1972.push(shootLoc);
+      } else if (year>=1973 && year<1974) {
+        shoot1973.push(shootLoc);
+      } else if (year>=1974 && year<1975) {
+        shoot1974.push(shootLoc);
+      } else if (year>=1975 && year<1976) {
+        shoot1975.push(shootLoc);
+      } else if (year>=1976 && year<1977) {
+        shoot1976.push(shootLoc);
+      } else if (year>=1977 && year<1978) {
+        shoot1977.push(shootLoc);
+      } else if (year>=1978 && year<1979) {
+        shoot1978.push(shootLoc);
+      } else if (year>=1979 && year<1980) {
+        shoot1979.push(shootLoc);
+      } 
+
+        else if (year>=1980 && year<1981) {
+        shoot1980.push(shootLoc);
+      } else if (year>=1981 && year<1982) {
+        shoot1981.push(shootLoc);
+      } else if (year>=1982 && year<1983) {
+        shoot1982.push(shootLoc);
+      } else if (year>=1983 && year<1984) {
+        shoot1983.push(shootLoc);
+      } else if (year>=1984 && year<1985) {
+        shoot1984.push(shootLoc);
+      } else if (year>=1985 && year<1986) {
+        shoot1985.push(shootLoc);
+      } else if (year>=1986 && year<1987) {
+        shoot1986.push(shootLoc);
+      } else if (year>=1987 && year<1988) {
+        shoot1987.push(shootLoc);
+      } else if (year>=1988 && year<1989) {
+        shoot1988.push(shootLoc);
+      } else if (year>=1989 && year<1990) {
+        shoot1989.push(shootLoc);
+      } 
+
+        else if (year>=1990 && year<1991) {
+        shoot1990.push(shootLoc);
+      } else if (year>=1991 && year<1992) {
+        shoot1991.push(shootLoc);
+      } else if (year>=1992 && year<1993) {
+        shoot1992.push(shootLoc);
+      } else if (year>=1993 && year<1994) {
+        shoot1993.push(shootLoc);
+      } else if (year>=1994 && year<1995) {
+        shoot1994.push(shootLoc);
+      } else if (year>=1995 && year<1996) {
+        shoot1995.push(shootLoc);
+      } else if (year>=1996 && year<1997) {
+        shoot1996.push(shootLoc);
+      } else if (year>=1997 && year<1998) {
+        shoot1997.push(shootLoc);
+      } else if (year>=1998 && year<1999) {
+        shoot1998.push(shootLoc);
+      } else if (year>=1999 && year<2000) {
+        shoot1999.push(shootLoc);
+      } 
+
+        else if (year>=2000 && year<2001) {
+        shoot2000.push(shootLoc);
+      } else if (year>=2001 && year<2002) {
+        shoot2001.push(shootLoc);
+      } else if (year>=2002 && year<2003) {
+        shoot2002.push(shootLoc);
+      } else if (year>=2003 && year<2004) {
+        shoot2003.push(shootLoc);
+      } else if (year>=2004 && year<2005) {
+        shoot2004.push(shootLoc);
+      } else if (year>=2005 && year<2006) {
+        shoot2005.push(shootLoc);
+      } else if (year>=2006 && year<2007) {
+        shoot2006.push(shootLoc);
+      } else if (year>=2007 && year<2008) {
+        shoot2007.push(shootLoc);
+      } else if (year>=2008 && year<2009) {
+        shoot2008.push(shootLoc);
+      } else if (year>=2009 && year<2010) {
+        shoot2009.push(shootLoc);
+      } 
+
+        else if (year>=2010 && year<2011) {
+        shoot2010.push(shootLoc);
+      } else if (year>=2011 && year<2012) {
+        shoot2011.push(shootLoc);
+      } else if (year>=2012 && year<2013) {
+        shoot2012.push(shootLoc);
+      } else if (year>=2013 && year<2014) {
+        shoot2013.push(shootLoc);
+      } else if (year>=2014 && year<2015) {
+        shoot2014.push(shootLoc);
+      } else if (year>=2015 && year<2016) {
+        shoot2015.push(shootLoc);
+      } else if (year>=2016 && year<2017) {
+        shoot2016.push(shootLoc);
+      } else if (year>=2017 && year<2018) {
+        shoot2017.push(shootLoc);
+      } else if (year>=2018 && year<2019) {
+        shoot2018.push(shootLoc);
+      } else if (year>=2019 && year<2020) {
+        shoot2019.push(shootLoc);
+      } 
+
+    // for chart
+    if (year in xyData) {
+      xyData[year] += 1;
     }
     else {
-      xyData[currentYear] =1;
+      xyData[year] =1;
     }
-
-    // if (year.getFullYear()===1970) {
-    //   shoot1970.push(shootLoc);
-    //   } else if (year.getFullYear()===1971) {
-    //     shoot1971.push(shootLoc);
-    //   } else if (year.getFullYear()===1972) {
-    //     shoot1972.push(shootLoc);
-    //   } else if (year.getFullYear()===1973) {
-    //     shoot1973.push(shootLoc);
-    //   } else if (year.getFullYear()===1974) {
-    //     shoot1974.push(shootLoc);
-    //   } else if (year.getFullYear()===1975) {
-    //     shoot1975.push(shootLoc);
-    //   } else if (year.getFullYear()===1976) {
-    //     shoot1976.push(shootLoc);
-    //   } else if (year.getFullYear()===1977) {
-    //     shoot1977.push(shootLoc);
-    //   } else if (year.getFullYear()===1978) {
-    //     shoot1978.push(shootLoc);
-    //   } else if (year.getFullYear()===1979) {
-    //     shoot1979.push(shootLoc);
-    //   } 
-    //     else if (year.getFullYear()===1980) {
-    //     shoot1980.push(shootLoc);
-    //   } else if (year.getFullYear()===1981) {
-    //     shoot1981.push(shootLoc);
-    //   } else if (year.getFullYear()===1982) {
-    //     shoot1982.push(shootLoc);
-    //   } else if (year.getFullYear()===1983) {
-    //     shoot1983.push(shootLoc);
-    //   } else if (year.getFullYear()===1984) {
-    //     shoot1984.push(shootLoc);
-    //   } else if (year.getFullYear()===1985) {
-    //     shoot1985.push(shootLoc);
-    //   } else if (year.getFullYear()===1986) {
-    //     shoot1986.push(shootLoc);
-    //   } else if (year.getFullYear()===1987) {
-    //     shoot1987.push(shootLoc);
-    //   } else if (year.getFullYear()===1988) {
-    //     shoot1988.push(shootLoc);
-    //   } else if (year.getFullYear()===1989) {
-    //     shoot1989.push(shootLoc);
-    //   } 
-    //     else if (year.getFullYear()===1990) {
-    //     shoot1990.push(shootLoc);
-    //   } else if (year.getFullYear()===1991) {
-    //     shoot1991.push(shootLoc);
-    //   } else if (year.getFullYear()===1992) {
-    //     shoot1992.push(shootLoc);
-    //   } else if (year.getFullYear()===1993) {
-    //     shoot1993.push(shootLoc);
-    //   } else if (year.getFullYear()===1994) {
-    //     shoot1994.push(shootLoc);
-    //   } else if (year.getFullYear()===1995) {
-    //     shoot1995.push(shootLoc);
-    //   } else if (year.getFullYear()===1996) {
-    //     shoot1996.push(shootLoc);
-    //   } else if (year.getFullYear()===1997) {
-    //     shoot1997.push(shootLoc);
-    //   } else if (year.getFullYear()===1998) {
-    //     shoot1998.push(shootLoc);
-    //   } else if (year.getFullYear()===1999) {
-    //     shoot1999.push(shootLoc);
-    //   }
-    //     else if (year.getFullYear()===2000) {
-    //     shoot2000.push(shootLoc);
-    //   } else if (year.getFullYear()===2001) {
-    //     shoot2001.push(shootLoc);
-    //   } else if (year.getFullYear()===2002) {
-    //     shoot2002.push(shootLoc);
-    //   } else if (year.getFullYear()===2003) {
-    //     shoot2003.push(shootLoc);
-    //   } else if (year.getFullYear()===2004) {
-    //     shoot2004.push(shootLoc);
-    //   } else if (year.getFullYear()===2005) {
-    //     shoot2005.push(shootLoc);
-    //   } else if (year.getFullYear()===2006) {
-    //     shoot2006.push(shootLoc);
-    //   } else if (year.getFullYear()===2007) {
-    //     shoot2007.push(shootLoc);
-    //   } else if (year.getFullYear()===2008) {
-    //     shoot2008.push(shootLoc);
-    //   } else if (year.getFullYear()===2009) {
-    //     shoot2009.push(shootLoc);
-    //   }
-    //     else if (year.getFullYear()===2010) {
-    //     shoot2010.push(shootLoc);
-    //   } else if (year.getFullYear()===2011) {
-    //     shoot2011.push(shootLoc);
-    //   } else if (year.getFullYear()===2012) {
-    //     shoot2012.push(shootLoc);
-    //   } else if (year.getFullYear()===2013) {
-    //     shoot2013.push(shootLoc);
-    //   } else if (year.getFullYear()===2014) {
-    //     shoot2014.push(shootLoc);
-    //   } else if (year.getFullYear()===2015) {
-    //     shoot2015.push(shootLoc);
-    //   } else if (year.getFullYear()===2016) {
-    //     shoot2016.push(shootLoc);
-    //   } else if (year.getFullYear()===2017) {
-    //     shoot2017.push(shootLoc);
-    //   } else if (year.getFullYear()===2018) {
-    //     shoot2018.push(shootLoc);
-    //   } else if (year.getFullYear()===2019) {
-    //     shoot2019.push(shootLoc);
-    //   }
 
   }; // end of for loop
 
+  // map data prep continued
+  mapData[1970]=shoot1970;
+  mapData[1971]=shoot1971;
+  mapData[1972]=shoot1972;
+  mapData[1973]=shoot1973;
+  mapData[1974]=shoot1974;
+  mapData[1975]=shoot1975;
+  mapData[1976]=shoot1976;
+  mapData[1977]=shoot1977;
+  mapData[1978]=shoot1978;
+  mapData[1979]=shoot1979;
+
+  mapData[1980]=shoot1980;
+  mapData[1981]=shoot1981;
+  mapData[1982]=shoot1982;
+  mapData[1983]=shoot1983;
+  mapData[1984]=shoot1984;
+  mapData[1985]=shoot1985;
+  mapData[1986]=shoot1986;
+  mapData[1987]=shoot1987;
+  mapData[1988]=shoot1988;
+  mapData[1989]=shoot1989;
+
+  mapData[1990]=shoot1990;
+  mapData[1991]=shoot1991;
+  mapData[1992]=shoot1992;
+  mapData[1993]=shoot1993;
+  mapData[1994]=shoot1994;
+  mapData[1995]=shoot1995;
+  mapData[1996]=shoot1996;
+  mapData[1997]=shoot1997;
+  mapData[1998]=shoot1998;
+  mapData[1999]=shoot1999;
+
+  mapData[2000]=shoot2000;
+  mapData[2001]=shoot2001;
+  mapData[2002]=shoot2002;
+  mapData[2003]=shoot2003;
+  mapData[2004]=shoot2004;
+  mapData[2005]=shoot2005;
+  mapData[2006]=shoot2006;
+  mapData[2007]=shoot2007;
+  mapData[2008]=shoot2008;
+  mapData[2009]=shoot2009;
+
+  mapData[2010]=shoot2010;
+  mapData[2011]=shoot2011;
+  mapData[2012]=shoot2012;
+  mapData[2013]=shoot2013;
+  mapData[2014]=shoot2014;
+  mapData[2015]=shoot2015;
+  mapData[2016]=shoot2016;
+  mapData[2017]=shoot2017;
+  mapData[2018]=shoot2018;
+  mapData[2019]=shoot2019;
+ 
+  // console.log(mapData);
+
+  //chart data prep continued
+  // console.log(xyData);
   Object.entries(xyData).forEach( ([key, value]) => 
   xyDataArr.push({'year':key, 'value': value}) )
-
-  // console.log(xyData);
-  console.log(xyDataArr);
-
-  // console.log(shoot1970);
-  // console.log(shoot1971);
-  // console.log(shoot1972);
-  // console.log(shoot1973);
-  // console.log(shoot1974);
-
-  // console.log(shoot1980);
-  // console.log(shoot1981);
-  // console.log(shoot1982);
-  // console.log(shoot1983);
-  // console.log(shoot1984);
-
-  // console.log(shoot7019);
+  // console.log(xyDataArr);
 
 
+// map animation
+// mapImageSeries.data = shoot7019; //for accumulated locations
+var currentYear = 1970;
+
+function getCurrentData() {
+  label.text = currentYear;
+  var data = mapData[currentYear];
+  // console.log(data);
+  currentYear++;
+  if (currentYear > 2019)
+    currentYear = 1970;
+  return data
+}
+
+function loop() {
+  var data = getCurrentData();
+  // for (let i = 0; i<data.length; i++) {
+  // console.log(data)
+  mapLineSeries.data = [{"multiGeoLine": [data]}];
+  mapImageSeries.data = data;
+  mapImageSeries.setTimeout(loop,300);
+}
+loop();
+
+// // chart animation :
 // times of events
 var startTime = new Date(response[0].Date).getFullYear();
 // console.log(startTime);
@@ -311,16 +392,89 @@ var endTime = new Date(response.slice(-1)[0].Date).getFullYear();
 var currentTime;
 // console.log(currentTime);
 
-// var shootYears = [
-//   { year: new Date(1970).getTime(), text: "1970"},
-//   { year: new Date(1971).getTime, text: "1971"},
-//   { year: new Date(1972).getTime, text: "1972"},
-//   { year: new Date(1973).getTime, text: "1973"},
-//   { year: new Date(1974).getTime, text: "1974"},
-//   { year: new Date(1975).getTime, text: "1975"},
-// ]
+
+/////// time-series chart at the bottom //////////
+var chart = container.createChild(am4charts.XYChart);
+chart.padding(0, 50, 200, 50);
+chart.height = 400;
+chart.valign = "bottom";
+
+// background gradient
+// var gradientFill = new am4core.LinearGradient();
+// gradientFill.addColor(am4core.color("#F7EDD4"), 0, 0);
+// gradientFill.addColor(am4core.color("#FCBA12"), 0.7, 0.7);
+// gradientFill.rotation = 90;
+// chart.background.fill = gradientFill;
+
+// x axis Date
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.title.text = "Year";
+categoryAxis.dataFields.category = "year";
+categoryAxis.tooltip.dateFormatter.dateFormat = "yyyy";
+categoryAxis.tooltip.background.pointerLength = 4;
+categoryAxis.tooltip.background.fillOpacity = 1;
+categoryAxis.tooltip.background.fill = am4core.color("#FCBA12");
+categoryAxis.tooltip.background.stroke = categoryAxis.tooltip.background.fill;
+
+categoryAxis.renderer.inside = false;
+categoryAxis.renderer.line.fill = am4core.color("#DB7093");
+categoryAxis.renderer.ticks.template.disabled = true;
+categoryAxis.renderer.grid.template.strokeDasharray = "3,3";
+categoryAxis.renderer.grid.template.strokeOpacity = 0.2;
+// categoryAxis.renderer.grid.template.stroke = am4core.color("#ffffff");
+categoryAxis.renderer.minLabelPosition = 0.03;
+
+// categoryAxis.renderer.labels.template.fill = am4core.color("#ffffff");
+categoryAxis.renderer.labels.template.fillOpacity = 0.4;
 
 
+// y axis incident (value)
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.title.text = "# of Incidents";
+valueAxis.min = 0;
+valueAxis.max = 100;
+// valueAxis.strictMinMax = true;
+valueAxis.tooltip.disabled = true;
+
+// valueAxis.renderer.inside = true;
+// valueAxis.renderer.line.disabled = true;
+// valueAxis.renderer.ticks.template.disabled = true;
+// valueAxis.renderer.minGridDistance = 10;
+// valueAxis.renderer.grid.template.disabled = true;
+// valueAxis.renderer.grid.template.stroke = am4core.color("#ffffff");
+
+// valueAxis.renderer.labels.template.fillOpacity = 0.4;
+// valueAxis.renderer.labels.template.fill = am4core.color("#ffffff");
+
+
+var lineSeries = chart.series.push(new am4charts.LineSeries());
+lineSeries.dataFields.valueY = "value";
+lineSeries.dataFields.categoryX = "year";
+lineSeries.tooltipText = "{value}";
+lineSeries.stroke = am4core.color("#090934");
+lineSeries.tooltip.background.fillOpacity = 0;
+lineSeries.tooltip.autoTextColor = false;
+lineSeries.tooltip.label.fill = am4core.color("#ffffff");
+lineSeries.tooltip.filters.clear();
+lineSeries.tooltip.pointerOrientation = "vertical";
+lineSeries.strokeWidth = 2;
+lineSeries.tensionX = 1;
+lineSeries.tensionY = 0.9;
+
+var bullet = lineSeries.bullets.push(new am4charts.Bullet());
+bullet.fill = am4core.color("#DB7093");
+
+// chart.dateFormatter.inputDateFormat = "YYYY";
+
+chart.cursor = new am4charts.XYCursor();
+chart.cursor.behavior = "none";
+chart.cursor.xAxis = categoryAxis;
+chart.cursor.lineX.strokeOpacity = 0;
+
+chart.data = xyDataArr
+lineSeries.sequencedInterpolation = true;
+
+/////////////////slider bar ////////////////
 // // when slider bar point is changed, update all elements
 // function setTime() {
 //     var time = new Date(startTime + (endTime - startTime) * slider.start).getFullYear();
@@ -346,137 +500,15 @@ var currentTime;
 //             }
 //         }
 //     }
-    
 
-      // if (time >= new Date(1970,1,1).getTime()) {
-        // mapLineSeries.data = [{"multiGeoLine": [shoot1970]}];
-        // mapImageSeries.data = shoot1970;
-      // } else if (time >= new Date(1971,1,1).getTime()) {
-        // mapLineSeries.data = [{"multiGeoLine": [shoot1971]}];
-        // mapImageSeries.data = shoot1971;
-      // } else if (time >= new Date(1972,1,1).getTime()) {
-      //   mapLineSeries.data = [{"multiGeoLine": [shoot1972]}];
-      //   mapImageSeries.data = shoot1972;
-      // } else if (time >= new Date(1973,1,1).getTime()) {
-      //   mapLineSeries.data = [{"multiGeoLine": [shoot1973]}];
-      //   mapImageSeries.data = shoot1973;
-      // }
+//  } //end setTime()
 
-  //   if (time > 1970 && time < 1971) {
-  //       mapLineSeries.data = [{"multiGeoLine": [shoot1970]}];
-  //       mapImageSeries.data = shoot1970;
-  //   }
-  //   else if (time > 1971 && time < 1972) {
-  //       mapLineSeries.data = [{"multiGeoLine": [shoot1971]}];
-  //       mapImageSeries.data = shoot1971;
-  //   }
-  //   else if (time > 1972 && time < 1973) {
-  //     mapLineSeries.data = [{"multiGeoLine": [shoot1972]}];
-  //     mapImageSeries.data = shoot1972;
-  // }
-
-
-
- // } //end setTime()
-
-
-mapImageSeries.data = shoot7019;
-
-
-// var marker1970 = mapChart.series.push(new am4maps.MapImageSeries());
-// var line1970 = mapLineSeries.push(new am4maps.MapLineSeries());
-// marker1970.data = shoot1970;
-// line1970.data = [{"multiGeoLine": [shoot1970]}];
-
-  
-
-//////////////////////////////////////////////////
-/////// time-series chart at the bottom //////////
-var chart = container.createChild(am4charts.XYChart);
-chart.padding(0, 50, 100, 50);
-chart.height = 300;
-chart.valign = "bottom";
-// background gradient
-var gradientFill = new am4core.LinearGradient();
-gradientFill.addColor(am4core.color("#F7EDD4"), 0, 0);
-gradientFill.addColor(am4core.color("#FFA07A"), 0.7, 0.7);
-gradientFill.rotation = 90;
-chart.background.fill = gradientFill;
-
-// x axis Date
-var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-categoryAxis.title.text = "Year";
-categoryAxis.dataFields.category = "year";
-categoryAxis.tooltip.dateFormatter.dateFormat = "YYYY";
-categoryAxis.tooltip.background.pointerLength = 4;
-categoryAxis.tooltip.background.fillOpacity = 1;
-categoryAxis.tooltip.background.fill = am4core.color("#DB7093");
-categoryAxis.tooltip.background.stroke = categoryAxis.tooltip.background.fill;
-
-
-categoryAxis.renderer.inside = false;
-categoryAxis.renderer.line.fill = am4core.color("#DB7093");
-categoryAxis.renderer.ticks.template.disabled = true;
-// categoryAxis.renderer.grid.template.strokeDasharray = "3,3";
-// categoryAxis.renderer.grid.template.strokeOpacity = 0.2;
-categoryAxis.renderer.grid.template.stroke = am4core.color("#ffffff");
-// categoryAxis.renderer.minLabelPosition = 0.03;
-
-// categoryAxis.renderer.labels.template.fill = am4core.color("#ffffff");
-categoryAxis.renderer.labels.template.fillOpacity = 0.4;
-
-
-// y axis incident (value)
-var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-valueAxis.title.text = "# of Incidents";
-valueAxis.min = 0;
-valueAxis.max = 100;
-// valueAxis.strictMinMax = true;
-valueAxis.tooltip.disabled = true;
-
-// valueAxis.renderer.inside = true;
-// valueAxis.renderer.line.disabled = true;
-// valueAxis.renderer.ticks.template.disabled = true;
-// valueAxis.renderer.minGridDistance = 10;
-// valueAxis.renderer.grid.template.disabled = true;
-// valueAxis.renderer.grid.template.stroke = am4core.color("#ffffff");
-
-// valueAxis.renderer.labels.template.fillOpacity = 0.4;
-// valueAxis.renderer.labels.template.fill = am4core.color("#ffffff");
-
-
-
-var lineSeries = chart.series.push(new am4charts.LineSeries());
-lineSeries.dataFields.valueY = "value";
-lineSeries.dataFields.categoryX = "year";
-lineSeries.tooltipText = "{value}";
-lineSeries.stroke = am4core.color("#DB7093");
-lineSeries.tooltip.background.fillOpacity = 0;
-lineSeries.tooltip.autoTextColor = false;
-lineSeries.tooltip.label.fill = am4core.color("#ffffff");
-lineSeries.tooltip.filters.clear();
-lineSeries.tooltip.pointerOrientation = "vertical";
-lineSeries.strokeWidth = 2;
-lineSeries.tensionX = 1;
-lineSeries.tensionY = 0.9;
-
-var bullet = lineSeries.bullets.push(new am4charts.Bullet());
-bullet.fill = am4core.color("#DB7093");
-
-// chart.dateFormatter.inputDateFormat = "YYYY";
-
-chart.cursor = new am4charts.XYCursor();
-chart.cursor.behavior = "none";
-chart.cursor.xAxis = categoryAxis;
-chart.cursor.lineX.strokeOpacity = 0;
 
 // chart.events.on("ready", function () {
 //     createSlider();
 // });
 
 // var slider;
-
-
 
 // var playButton;
 
@@ -548,75 +580,8 @@ chart.cursor.lineX.strokeOpacity = 0;
 // }, 2000);
 
 
-
-chart.data = xyDataArr
-
-// [
-// { "year": "1970", "value": shoot1970.length },
-// { "year": "1971", "value": shoot1971.length },
-// { "year": "1972", "value": shoot1972.length },
-// { "year": "1973", "value": shoot1973.length },
-// { "year": "1974", "value": shoot1974.length },
-// { "year": "1975", "value": shoot1975.length },
-// { "year": "1976", "value": shoot1976.length },
-// { "year": "1977", "value": shoot1977.length },
-// { "year": "1978", "value": shoot1978.length },
-// { "year": "1979", "value": shoot1979.length },
-
-// { "year": "1980", "value": shoot1980.length },
-// { "year": "1981", "value": shoot1981.length },
-// { "year": "1982", "value": shoot1982.length },
-// { "year": "1983", "value": shoot1983.length },
-// { "year": "1984", "value": shoot1984.length },
-// { "year": "1985", "value": shoot1985.length },
-// { "year": "1986", "value": shoot1986.length },
-// { "year": "1987", "value": shoot1987.length },
-// { "year": "1988", "value": shoot1988.length },
-// { "year": "1989", "value": shoot1989.length },
-
-// { "year": "1990", "value": shoot1990.length },
-// { "year": "1991", "value": shoot1991.length },
-// { "year": "1992", "value": shoot1992.length },
-// { "year": "1993", "value": shoot1993.length },
-// { "year": "1994", "value": shoot1994.length },
-// { "year": "1995", "value": shoot1995.length },
-// { "year": "1996", "value": shoot1996.length },
-// { "year": "1997", "value": shoot1997.length },
-// { "year": "1998", "value": shoot1998.length },
-// { "year": "1999", "value": shoot1999.length },
-
-// { "year": "2000", "value": shoot2000.length },
-// { "year": "2001", "value": shoot2001.length },
-// { "year": "2002", "value": shoot2002.length },
-// { "year": "2003", "value": shoot2003.length },
-// { "year": "2004", "value": shoot2004.length },
-// { "year": "2005", "value": shoot2005.length },
-// { "year": "2006", "value": shoot2006.length },
-// { "year": "2007", "value": shoot2007.length },
-// { "year": "2008", "value": shoot2008.length },
-// { "year": "2009", "value": shoot2009.length },
-
-// { "year": "2010", "value": shoot2010.length },
-// { "year": "2011", "value": shoot2011.length },
-// { "year": "2012", "value": shoot2012.length },
-// { "year": "2013", "value": shoot2013.length },
-// { "year": "2014", "value": shoot2014.length },
-// { "year": "2015", "value": shoot2015.length },
-// { "year": "2016", "value": shoot2016.length },
-// { "year": "2017", "value": shoot2017.length },
-// { "year": "2018", "value": shoot2018.length },
-// { "year": "2019", "value": shoot2019.length },
-// ];
-
-lineSeries.sequencedInterpolation = true;
-
 }) // end of d3.json promise
 
-// label for this map and chart
-var label = container.createChild(am4core.Label);
-label.text = "Team BB4 | Soyoung | Powered by amCharts";
-label.valign = "bottom";
-label.padding(0, 10, 10, 0);
-label.align = "right";
+
 
 }); // end am4core.ready()
